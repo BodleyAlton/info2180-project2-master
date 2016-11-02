@@ -1,12 +1,16 @@
 /*Initial position of blank piece*/
 var tBlank= 300;//top of blank piece
 var lBlank= 300;//left margin of blank piece
-var piece=[];
+var piece=[];// Array of puzzle pieces
 window.onload = function(){
 	puzzle();
 	$('#shufflebutton').click(shuffle);
 }
 
+/*Creates the puzzle grid.
+Adds the background picture to the puzzle.
+Adds the 'movablepiece' functionality to the puzzle area.
+Adds the 'move' functionality to the puzzle pieces.*/
 function puzzle(){
 	piece= $('#puzzlearea div');
 	$('#puzzlearea div').addClass('puzzlepiece');
@@ -16,7 +20,8 @@ function puzzle(){
 		for (var x = 0; x <= b; x++) {
 			piece[i].style.top = 100 * a + "px";
 			piece[i].style.left = 100 * x  + "px";
-			piece[i].style.backgroundPosition = -x * 100 + "px " + a * -100 + "px";
+			piece[i].style.backgroundPosition = -x * 100 + "px " + -a * 100 + "px";
+			piece[i].style.transitionDuration='1s';// Sets transitions to occur over a duration 1s.
 			piece[i].addEventListener('mouseenter',movablepiece);							
 			piece[i].addEventListener('click',move);
 			piece[i].addEventListener('mouseleave',nmovablepiece);
@@ -30,7 +35,7 @@ function puzzle(){
 		
 	};
 }
-
+/*Adds the 'movablepiece' class to a piece which is next to the blank piece.*/
 function movablepiece(event){
 	if (Math.abs(tBlank - parseInt(this.style.top)) == 100) {
 		if (Math.abs(lBlank - parseInt(this.style.left)) == 0) {
@@ -46,7 +51,7 @@ function movablepiece(event){
 	}
 	return false;
 }	
-	
+/*Removes the 'movablepiece' class from a piece when it is not being hovered */	
 function nmovablepiece(x){
 	if (Math.abs(tBlank - parseInt(this.style.top)) == 100) {
 		if (Math.abs(lBlank - parseInt(this.style.left)) == 0) {
@@ -59,7 +64,7 @@ function nmovablepiece(x){
 		}
 	}
 }
-
+/*Moves the tiles which are beside the blank tile*/
 function move(event){
 	if($(this).hasClass('movablepiece')){
 		var ct=parseInt(this.style.top);
@@ -72,6 +77,18 @@ function move(event){
 		this.style.left = tempL +'px';
 	}	
 }
+/*Impliments the shuffle functionality*/
 function shuffle(){
-	console.log("shuffle");
+	for (var i =0; i<200; i++){
+		for (var p = Math.floor(Math.random()*15); p > -1; p--){
+		var ct=parseInt(piece[p].style.top);
+		var cl=parseInt(piece[p].style.left);
+		var tempT=tBlank;
+		var tempL=lBlank;
+		tBlank=ct;
+		lBlank=cl;
+		piece[p].style.top = tempT +'px';
+		piece[p].style.left = tempL +'px';
+		}
+	}
 }
